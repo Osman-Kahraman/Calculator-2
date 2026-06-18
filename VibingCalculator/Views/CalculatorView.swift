@@ -19,8 +19,10 @@ struct CalculatorView: View {
     }
 
     var body: some View {
-        VStack(spacing: 12) {
-            VStack(alignment: .trailing, spacing: 8) {
+        VStack() {
+            Spacer()
+            
+            VStack() {
                 ZStack(alignment: .bottomTrailing) {
                     Text(displayExpression)
                         .font(.system(size: hasResult ? 24 : 56, weight: hasResult ? .semibold : .bold, design: .rounded))
@@ -49,35 +51,44 @@ struct CalculatorView: View {
                             .transition(.opacity)
                     }
                 }
-                .frame(maxWidth: .infinity, minHeight: 132, alignment: .bottomTrailing)
-                .padding(.top)
+                .frame(maxWidth: .infinity, minHeight: 232, alignment: .bottomTrailing)
+                .padding(.trailing, 20)
+                .padding(.bottom, 12)
                 .animation(
                     vm.shouldAnimateDisplayTransition ? .spring(response: 0.45, dampingFraction: 0.82) : nil,
                     value: hasResult
                 )
                 .animation(.easeOut(duration: 0.25), value: vm.fadingExpression)
-
-                if vm.isLoading {
-                    ProgressView("Calculating on AWS...")
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                }
-
-                if let error = vm.errorMessage {
-                    Text(error)
-                        .foregroundStyle(.red)
-                        .frame(maxWidth: .infinity, alignment: .trailing)
-                        .font(.footnote)
-                }
             }
-            .padding(.horizontal)
+            .background(
+                RoundedRectangle(cornerRadius: 8)
+                    .fill(
+                        Color(
+                            red: 0.78,
+                            green: 0.82,
+                            blue: 0.70
+                        )
+                    )
+            )
+            .padding(.horizontal, 20)
+
+            if let error = vm.errorMessage {
+                Text(error)
+                    .foregroundStyle(.red)
+                    .frame(maxWidth: .infinity, alignment: .trailing)
+                    .font(.footnote)
+            }
 
             Spacer()
 
             VStack(spacing: 10) {
                 HStack(spacing: 10) {
+                    CalculatorButton(title: "") { vm.append("") }
+                    CalculatorButton(title: "") { vm.append("") }
                     CalculatorButton(title: "C") { vm.clear() }
                     CalculatorButton(title: "⌫") { vm.backspace() }
                 }
+                .padding(.horizontal)
 
                 ForEach(rows, id: \.self) { row in
                     HStack(spacing: 10) {
@@ -96,6 +107,14 @@ struct CalculatorView: View {
             .padding(.horizontal)
             .padding(.bottom)
         }
+        .background(
+            Color(
+                red: 0.12,
+                green: 0.12,
+                blue: 0.12
+            )
+            .ignoresSafeArea()
+        )
     }
 }
 

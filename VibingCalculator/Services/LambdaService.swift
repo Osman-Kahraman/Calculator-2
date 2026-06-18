@@ -8,7 +8,7 @@
 import Foundation
 
 struct LambdaService {
-    static let invokeURL = "https://3gi6e1vzth.execute-api.us-east-2.amazonaws.com/dev/calculate"
+    static let invokeURL = "YOUR API"
     
     static func calculate(
         expression: String,

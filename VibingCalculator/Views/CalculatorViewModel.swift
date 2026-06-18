@@ -116,7 +116,6 @@ final class CalculatorViewModel: ObservableObject {
                     Task { @MainActor in
                         switch result {
                         case .success(let value):
-                            try? await Task.sleep(for: .seconds(1))
                             self.shouldAnimateDisplayTransition = true
                             self.resultText = "\(value)"
                             self.isContinuingFromResult = false
