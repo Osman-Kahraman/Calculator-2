@@ -11,9 +11,7 @@ struct LambdaService {
     static let invokeURL = "https://3gi6e1vzth.execute-api.us-east-2.amazonaws.com/dev/calculate"
     
     static func calculate(
-        operation: String,
-        a: Int,
-        b: Int,
+        expression: String,
         completion: @escaping (Result<Int, Error>) -> Void
     ) {
         guard let url = URL(string: invokeURL) else {
@@ -23,11 +21,7 @@ struct LambdaService {
         
         var request = URLRequest(url: url)
         request.httpMethod = "POST"
-        let body: [String: Any] = [
-            "operation": operation,
-            "a": a,
-            "b": b
-        ]
+        let body: [String: Any] = ["expression": expression]
         request.httpBody = try? JSONSerialization.data(withJSONObject: body)
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         

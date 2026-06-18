@@ -32,36 +32,8 @@ final class CalculatorViewModel: ObservableObject {
         errorMessage = nil
         defer { isLoading = false }
 
-        let operators = ["+", "-", "*", "/"]
-        var op: String?
-        var a: Int?
-        var b: Int?
-
-        for symbol in operators {
-            if let range = expression.range(of: symbol) {
-                op = symbol
-                let left = String(expression[..<range.lowerBound])
-                let right = String(expression[range.upperBound...])
-                a = Int(left.trimmingCharacters(in: .whitespaces))
-                b = Int(right.trimmingCharacters(in: .whitespaces))
-                break
-            }
-        }
-
-        let operatorMapping: [String: String] = [
-            "+": "add",
-            "-": "subtract",
-            "*": "multiply",
-            "/": "divide"
-        ]
-
-        guard let op = op, let operation = operatorMapping[op], let a = a, let b = b else {
-            errorMessage = "Invalid expression"
-            return
-        }
-
         await withCheckedContinuation { continuation in
-            LambdaService.calculate(operation: operation, a: a, b: b) { result in
+            LambdaService.calculate(expression: self.expression) { result in
                 DispatchQueue.main.async {
                     switch result {
                     case .success(let value):
@@ -75,4 +47,3 @@ final class CalculatorViewModel: ObservableObject {
         }
     }
 }
-
