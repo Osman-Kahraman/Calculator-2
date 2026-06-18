@@ -32,22 +32,47 @@ final class CalculatorViewModel: ObservableObject {
         errorMessage = nil
         defer { isLoading = false }
 
-        do {
-            var request = URLRequest(url: endpoint)
-            request.httpMethod = "POST"
-            request.addValue("application/json", forHTTPHeaderField: "Content-Type")
-            let payload = CalculationRequest(expression: expression)
-            request.httpBody = try JSONEncoder().encode(payload)
+        let operators = ["+", "-", "*", "/"]
+        var op: String?
+        var a: Int?
+        var b: Int?
 
-            let (data, response) = try await URLSession.shared.data(for: request)
-            guard let http = response as? HTTPURLResponse, (200..<300).contains(http.statusCode) else {
-                throw URLError(.badServerResponse)
+        for symbol in operators {
+            if let range = expression.range(of: symbol) {
+                op = symbol
+                let left = String(expression[..<range.lowerBound])
+                let right = String(expression[range.upperBound...])
+                a = Int(left.trimmingCharacters(in: .whitespaces))
+                b = Int(right.trimmingCharacters(in: .whitespaces))
+                break
             }
+        }
 
-            let decoded = try JSONDecoder().decode(CalculationResponse.self, from: data)
-            resultText = "Result: \(decoded.result)"
-        } catch {
-            errorMessage = "Something went wrong: \(error.localizedDescription)"
+        let operatorMapping: [String: String] = [
+            "+": "add",
+            "-": "subtract",
+            "*": "multiply",
+            "/": "divide"
+        ]
+
+        guard let op = op, let operation = operatorMapping[op], let a = a, let b = b else {
+            errorMessage = "Invalid expression"
+            return
+        }
+
+        await withCheckedContinuation { continuation in
+            LambdaService.calculate(operation: operation, a: a, b: b) { result in
+                DispatchQueue.main.async {
+                    switch result {
+                    case .success(let value):
+                        self.resultText = "Result: \(value)"
+                    case .failure(let error):
+                        self.errorMessage = "Something went wrong: \(error.localizedDescription)"
+                    }
+                    continuation.resume()
+                }
+            }
         }
     }
 }
+
