@@ -26,14 +26,34 @@ struct CalculatorView: View {
             VStack() {
                 ZStack(alignment: .bottomTrailing) {
                     VStack(alignment: .trailing, spacing: 6) {
-                        ForEach(vm.expressionHistory, id: \.self) { item in
-                            Text(item)
-                                .font(.system(size: 16, weight: .regular, design: .rounded))
-                                .foregroundStyle(.secondary)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.6)
-                                .matchedGeometryEffect(id: "expr-\(item)", in: animNS)
-                                .transition(.move(edge: .top).combined(with: .opacity))
+                        ScrollViewReader { proxy in
+                            ScrollView(.vertical, showsIndicators: false) {
+                                VStack(alignment: .trailing, spacing: 6) {
+                                    ForEach(vm.expressionHistory, id: \.self) { item in
+                                        Text(item)
+                                            .font(.system(size: 16, weight: .regular, design: .rounded))
+                                            .foregroundStyle(.secondary)
+                                            .lineLimit(1)
+                                            .minimumScaleFactor(0.6)
+                                            .matchedGeometryEffect(id: "expr-\(item)", in: animNS)
+                                            .transition(.move(edge: .top).combined(with: .opacity))
+                                            .id(item)
+                                    }
+                                    Color.clear
+                                        .frame(height: 1)
+                                        .id("BOTTOM")
+                                }
+                            }
+                            .frame(maxHeight: 150)
+                            .defaultScrollAnchor(.bottom)
+                            .onAppear {
+                                proxy.scrollTo("BOTTOM", anchor: .bottom)
+                            }
+                            .onChange(of: vm.expressionHistory.count) { _, _ in
+                                withAnimation(.easeOut(duration: 0.25)) {
+                                    proxy.scrollTo("BOTTOM", anchor: .bottom)
+                                }
+                            }
                         }
 
                         // 2) Current small expression (only when there is a result, so it appears above the big result)
