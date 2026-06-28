@@ -12,7 +12,7 @@ final class CalculatorViewModel: ObservableObject {
     @Published var shouldAnimateDisplayTransition = true
     @Published var fadingExpression: String?
 
-    private var isContinuingFromResult = false
+    @Published private(set) var isContinuingFromResult = false
     @Published var expressionHistory: [String] = []
 
     private var lastExpressionBeforeContinuing: String? {
@@ -116,12 +116,6 @@ final class CalculatorViewModel: ObservableObject {
             }
         }
 
-        if !expression.isEmpty {
-            if expressionHistory.last != expression {
-                expressionHistory.append(expression)
-            }
-        }
-
         isLoading = true
         errorMessage = nil
         defer { isLoading = false }
@@ -132,6 +126,11 @@ final class CalculatorViewModel: ObservableObject {
                     Task { @MainActor in
                         switch result {
                         case .success(let value):
+                            withAnimation(.spring(response: 0.45, dampingFraction: 0.82)) {
+                                if self.expressionHistory.last != self.expression {
+                                    self.expressionHistory.append(self.expression)
+                                }
+                            }
                             self.shouldAnimateDisplayTransition = true
                             self.resultText = "\(value)"
                             self.isContinuingFromResult = false

@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CalculatorView: View {
     @StateObject private var vm = CalculatorViewModel()
+    @Namespace private var animNS
 
     private let rows: [[String]] = [
         ["7", "8", "9", "/"],
@@ -25,25 +26,18 @@ struct CalculatorView: View {
             VStack() {
                 ZStack(alignment: .bottomTrailing) {
                     VStack(alignment: .trailing, spacing: 6) {
-                        // 1) History: oldest at top, newest at bottom
-                        ForEach(vm.expressionHistory.dropLast(), id: \.self) { item in
+                        ForEach(vm.expressionHistory, id: \.self) { item in
                             Text(item)
                                 .font(.system(size: 16, weight: .regular, design: .rounded))
                                 .foregroundStyle(.secondary)
                                 .lineLimit(1)
                                 .minimumScaleFactor(0.6)
+                                .matchedGeometryEffect(id: "expr-\(item)", in: animNS)
                                 .transition(.move(edge: .top).combined(with: .opacity))
                         }
 
                         // 2) Current small expression (only when there is a result, so it appears above the big result)
-                        if hasResult {
-                            Text(displayExpression)
-                                .font(.system(size: 20, weight: .semibold, design: .rounded))
-                                .foregroundStyle(.secondary)
-                                .lineLimit(1)
-                                .minimumScaleFactor(0.6)
-                                .transition(.opacity)
-                        }
+                        // Removed as per instructions
 
                         // 3) Big result or big expression (newest at the bottom)
                         Group {
@@ -53,7 +47,7 @@ struct CalculatorView: View {
                                     .foregroundStyle(.primary)
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.45)
-                                    .transition(.opacity)
+                                    .transition(.move(edge: .bottom).combined(with: .opacity))
                             } else {
                                 Text(displayExpression)
                                     .font(.system(size: 56, weight: .bold, design: .rounded))
@@ -61,6 +55,8 @@ struct CalculatorView: View {
                                     .opacity(vm.expression.isEmpty ? 0.35 : 1)
                                     .lineLimit(1)
                                     .minimumScaleFactor(0.45)
+                                    .transition(.move(edge: .top).combined(with: .opacity))
+                                    .matchedGeometryEffect(id: "expr-\(displayExpression)", in: animNS)
                             }
                         }
                     }
