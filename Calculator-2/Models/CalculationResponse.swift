@@ -1,6 +1,6 @@
 //
 //  CalculationResponse.swift
-//  VibingCalculator
+//  Calculator-2
 //
 //  Created by Osman Kahraman on 2026-06-11.
 //
