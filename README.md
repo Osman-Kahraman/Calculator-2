@@ -8,8 +8,8 @@
 </p>
 
 <p align="center">
-  <img width="300" src="docs/images/screenshot1.png" />
-  <img width="300" src="docs/images/screenshot2.png" />
+  <img width="300" src="https://github.com/user-attachments/assets/8a7bdedb-62a6-4918-8d65-b0a745cd8e92" />
+  <img width="300" src="https://github.com/user-attachments/assets/844f9a40-af15-4eee-b339-6ba2e97e9a9f" />
 </p>
 
 <p align="center">
