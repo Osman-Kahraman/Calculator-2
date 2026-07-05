@@ -188,6 +188,8 @@ You own:
 
 No shared backend is required.
 
+-> See [backend/README.md](backend/README.md)
+
 ## Deploy Your Backend
 
 Inside the `backend/` folder you'll find:

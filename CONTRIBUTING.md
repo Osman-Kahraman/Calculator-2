@@ -6,8 +6,6 @@ Whether you'd like to fix a bug, improve the UI, optimize the backend, or sugges
 
 If you have an idea, feel free to open an issue or submit a pull request.
 
----
-
 # Getting Started
 
 1. Fork the repository.
@@ -41,8 +39,6 @@ git push origin feature/your-feature-name
 
 7. Open a Pull Request.
 
----
-
 # Development Setup
 
 ## iOS Application
@@ -55,8 +51,6 @@ Requirements:
 - Swift 6+
 
 Open the project in Xcode and run it on a simulator or physical device.
-
----
 
 ## Backend
 
@@ -78,7 +72,7 @@ To deploy your own backend:
 
 The backend is designed to be deployed to your own AWS account.
 
----
+-> See [backend/README.md](backend/README.md)
 
 # AI Mode
 
@@ -120,8 +114,6 @@ Please avoid committing:
 - `GoogleService-Info.plist`
 - Personal configuration files
 
----
-
 # Example Commit Messages
 
 ```text
@@ -135,8 +127,6 @@ Improve: Button animations
 
 Docs: Update backend setup guide
 ```
-
----
 
 # Code Style
 
@@ -153,8 +143,6 @@ Docs: Update backend setup guide
 - Avoid hardcoded secrets.
 - Prefer readable code over clever code.
 
----
-
 # Reporting Bugs
 
 If you find a bug:
@@ -163,8 +151,6 @@ If you find a bug:
 2. Include steps to reproduce.
 3. Include screenshots when applicable.
 4. Include console logs if relevant.
-
----
 
 # Feature Requests
 
@@ -176,14 +162,10 @@ If possible, explain:
 - your proposed solution,
 - and why it improves the project.
 
----
-
 # Code of Conduct
 
 Please follow the project's `CODE_OF_CONDUCT.md`.
 
 Let's build something fun together.
-
----
 
 Thank you for contributing to Calculator-2!
